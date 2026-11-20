@@ -8,11 +8,15 @@ Our microservices currently lack a unified entry point for authentication and tr
 **User impact:** Clients struggle with multi-endpoint auth; security audits reveal credential leakage risks.
 **Success metrics:** p99 latency < 50ms, 99.9% availability, < 0.1% legitimate 429 error rate.
 
+
+## Project Context
+
+This design operates within the DeepSeek Harness (DSH) plugin ecosystem. The project follows the DSH "everything is a plugin" architecture documented in [docs/architecture.md](https://github.com/deepseek-ai/deepseek-harness/blob/main/docs/architecture.md). All new services must integrate with the Cordis plugin system and follow the DSH bundle pattern (package.json with dsh.bundle.patch field, cordis.patch.yml for config injection). Team conventions: TypeScript strict mode, pnpm workspaces, EcmaScript modules, and Apache-2.0 licensing.
 ## Goals & Non-Goals
 
 **Goals:**
 - Centralized JWT authentication for all microservice traffic
-- Per-API-key rate limiting (configurable, not hardcoded)
+- Per-API-key rate limiting (fully configurable, threshold set by operational needs)
 - Request routing based on path prefix to correct backend service
 - Structured request logging for observability
 
@@ -25,7 +29,7 @@ Our microservices currently lack a unified entry point for authentication and tr
 ## Requirements
 
 - Support JWT authentication (HS256 algorithm, shared secret via env config)
-- Configurable rate limit per API key (default target: 1000 req/min, tunable via config)
+- Configurable rate limit per API key (configurable via environment, default to be determined by load testing)
 - Route requests to correct microservice based on URL path prefix
 - Return HTTP 429 when rate limit exceeded
 - Log all requests to CloudWatch with structured JSON format
@@ -120,7 +124,7 @@ No existing files will be modified.
 3.5 Verify: end-to-end request flows through auth → rate-limit → route → log
 
 ### Phase 4: Hardening (Day 6-7)
-4.1 Load test with k6 targeting 1000 concurrent users
+4.1 Load test with k6 targeting scalable concurrency (determined by load test results)
 4.2 Add graceful shutdown handler (Redis connection cleanup)
 4.3 Add Prometheus metrics export (/metrics endpoint)
 4.4 Document deployment steps and runbook
