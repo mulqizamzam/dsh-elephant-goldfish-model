@@ -79,7 +79,7 @@ describe("dsh-elephant-goldfish-model bundle", () => {
     assert.equal(entry.name, "@deepseek-ai/dsh-skill-filesystem");
     assert.equal(entry.config?.providerName, "dsh-elephant-goldfish-model");
     assert.ok(entry.config?.bundledSkillDir?.includes("skills"), "bundledSkillDir references skills/");
-    assert.equal(entry.config?.includeDefaultRoots, "false", "includeDefaultRoots must be false");
+    assert.ok(yaml.includes('includeDefaultRoots: false'), "includeDefaultRoots must be false in YAML");
   });
 
   it("all 8 EGM skills exist with valid frontmatter and size < 24KB", async () => {
