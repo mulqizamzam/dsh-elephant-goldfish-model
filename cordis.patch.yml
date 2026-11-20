@@ -1,0 +1,11 @@
+# DeepSeek Harness bundle for the Elephant-Goldfish Model (EGM) skills.
+# Discovers and serves EGM skills (egm-brainstorm, egm-draft, egm-review, etc.)
+# through the skill-filesystem provider at rank 600 (bundled).
+- insert:
+    - id: dsh-elephant-goldfish-model-skills
+      name: '@deepseek-ai/dsh-skill-filesystem'
+      config:
+        providerName: dsh-elephant-goldfish-model
+        includeDefaultRoots: false
+        bundledSkillDir: !!js "process.getBuiltinModule('node:path').join(process.getBuiltinModule('node:path').dirname(process.getBuiltinModule('node:module').createRequire(baseUrl).resolve('dsh-elephant-goldfish-model/package.json')), 'skills')"
+        watch: true

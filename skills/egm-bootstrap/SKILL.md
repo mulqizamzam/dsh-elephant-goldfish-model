@@ -8,7 +8,7 @@ description: Bootstrap directory README.md files across a repository subtree.
 # EGM Peanuts and Hay Bootstrap (`egm-bootstrap`)
 
 When running in Codex or ChatGPT Work, first read [Codex integration](../../docs/codex.md).
-In Claude Code or Cowork, read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` first.
+Read `${DSH_PLUGIN_ROOT:-skills}/../docs/dsh.md` for DeepSeek Harness integration notes.
 
 ## Overview
 
@@ -26,7 +26,7 @@ assistants.
 ## Delegation
 
 A Goldfish runs in a fresh context with no conversation history. Spawn each
-subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`). Each subagent is defined in `agents/<file>.md`, and its
+subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`; DeepSeek Harness: `subagent`). Each subagent is defined in `agents/<file>.md`, and its
 frontmatter `name` (for example `egm-zoom-out`) is the subagent type to request
 where your harness registers named subagents. Otherwise spawn a general-purpose
 subagent and tell it to read that persona file first. Pass the prompt verbatim

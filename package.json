@@ -1,0 +1,50 @@
+{
+  "name": "dsh-elephant-goldfish-model",
+  "version": "0.1.1",
+  "description": "Elephant-Goldfish Model for DeepSeek Harness — design with context, review with fresh eyes.",
+  "type": "module",
+  "main": "./index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "index.mjs",
+    "cordis.patch.yml",
+    "skills/",
+    "docs/",
+    "agents/",
+    "resources/",
+    "assets/",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=22.5.0",
+    "dsh": "0.2.1-rc.2"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-skill-filesystem": "0.2.1-rc.2"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/google/elephant-goldfish-model"
+  },
+  "homepage": "https://egm.dev",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "egm",
+    "elephant-goldfish",
+    "spec-driven-development",
+    "agent-skills",
+    "design-review"
+  ]
+}
