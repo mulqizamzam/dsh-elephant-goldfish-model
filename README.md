@@ -1,48 +1,62 @@
 # dsh-elephant-goldfish-model
 
-DeepSeek Harness 插件：将 Google 的 [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model) 设计评审工作流带入 DSH。
+Plugin DeepSeek Harness yang membawa workflows [Elephant-Goldfish Model](https://github.com/google/elephant-goldfish-model) karya Google ke DSH.
 
-## 概述
+## Ringkasan
 
-**大象**持有项目上下文并起草规范。**金鱼**评审员在没有之前对话的情况下审查草稿，帮助暴露未说明的假设和盲点。**你**做出架构权衡并在实施前批准规范。
+**Gajah** memegang konteks proyek dan menyusun spesifikasi. **Ikan emas** (reviewer) memeriksa draf tanpa ingatan percakapan sebelumnya, sehingga menemukan asumsi tersembunyi dan titik buta. **Kamu** yang memutuskan perdagangan arsitektur dan menyetujui spesifikasi sebelum implementasi.
 
-- 🐘 **设计阶段**：用大象思维发展想法、起草设计方案
-- 🐟 **评审阶段**：用金鱼视角 fresh eyes 审查设计和代码
-- 🔍 **偏差检测**：检查代码是否偏离设计文档
+- 🐘 **Tahap Desain**: Kembangkan ide dan rancang dokumen dengan pola pikir gajah
+- 🐟 **Tahap Review**: Uji desain dan kode dengan sudut pandang ikan emas yang segar
+- 🔍 **Deteksi Drift**: Bandingkan kode sumber dengan dokumen desain untuk menemukan penyimpangan
 
-## 安装
+## Instalasi
 
 ```sh
-# 将插件添加到 DSH profile
+# Tambahkan plugin ke profile DSH
 dsh plugin --profile web add ./dsh-elephant-goldfish-model
 
-# 验证安装
+# Verifikasi pemasangan
 dsh --profile web --dump-config | grep elephant-goldfish
 ```
 
-## 使用方法
+## Cara Pakai
 
-安装后，通过 `skill` 工具调用各 EGM skills：
+Setelah terpasang, panggil skill EGM melalui alat `skill`:
 
 ```
-skill("egm-brainstorm")   # 头脑风暴想法
-skill("egm-draft")        # 起草设计文档
-skill("egm-review")       # Goldfish 评审
-skill("egm-review-loop")  # 多轮迭代评审
-skill("egm-resolve")      # 解决评审问题
-skill("egm-drift-report") # 检查代码偏差
-skill("egm-bootstrap")    # 生成仓库 README
-skill("egm-lite")         # 轻量级工作流
+skill("egm-brainstorm")   # Menuangkan ide dan possibility
+skill("egm-draft")        # Menyusun draf dokumen desain
+skill("egm-review")       # Review Goldfish pada dokumen
+skill("egm-review-loop")  # Siklus review multi putaran
+skill("egm-resolve")      # Menyelesaikan temuan review
+skill("egm-drift-report") # Cek ketidaksesuaian kode vs desain
+skill("egm-bootstrap")    # Generate README compliant EGM
+skill("egm-lite")         # Workflow ringan EGM
 ```
 
-## 插件结构
+### Subagent di DSH
+
+Skill review membutuhkan agent baru dengan konteks terpisah. Gunakan `subagent` bawaan DSH:
+
+```javascript
+// Contoh: panggil reviewer zoom-out
+subagent({
+  description: "EGM zoom-out review",
+  prompt: "Baca agents/zoom_out.md dulu, lalu review desain ini..."
+})
+```
+
+Setiap persona tersimpan di `agents/<nama>.md`. Field `name` di frontmatter menandai tipe reviewer.
+
+## Struktur Plugin
 
 ```
 dsh-elephant-goldfish-model/
-├── package.json              # DSH bundle 元数据
-├── index.mjs                 # 入口点
-├── cordis.patch.yml          # Cordis 配置注入（注册 skill-filesystem）
-├── skills/                   # EGM skills（8个）
+├── package.json              # Metadata bundle DSH
+├── index.mjs                 # Titik masuk
+├── cordis.patch.yml          # Injeksi Cordis (daftar skill-filesystem)
+├── skills/                   # 8 Skill EGM
 │   ├── egm-bootstrap/
 │   ├── egm-brainstorm/
 │   ├── egm-draft/
@@ -51,31 +65,31 @@ dsh-elephant-goldfish-model/
 │   ├── egm-resolve/
 │   ├── egm-review/
 │   └── egm-review-loop/
-├── agents/                   # Goldfish 评审员 persona 定义
-├── resources/                # 文档标准和执行指令
-├── assets/                   # 插件图标
+├── agents/                   # Definisi persona Goldfish reviewer
+├── resources/                # Standar dokumen & instruksi eksekusi
+├── assets/                   # Ikon plugin
 └── docs/
-    └── dsh.md               # DSH 集成指南
+    └── dsh.md               # Panduan integrasi DSH
 ```
 
-## 技术细节
+## Detail Teknis
 
-- **DSH 版本要求**: `0.2.1-rc.2`
-- **Node.js 要求**: `>=22.5.0`
-- **License**: Apache-2.0（继承自上游 EGM）
-- **Skill Provider**: 使用 `@deepseek-ai/dsh-skill-filesystem` 的 `bundledSkillDir` 机制，在 rank 600 注册
+- **Versi DSH target**: `0.2.1-rc.2`
+- **Node.js minimum**: `>=22.5.0`
+- **Lisensi**: Apache-2.0 (disalin dari upstream EGM)
+- **Skill Provider**: Mendaftar `@deepseek-ai/dsh-skill-filesystem` lewat `bundledSkillDir` pada rank 600
 
-## 与原生的区别
+## Perbedaan dengan Asli
 
-此插件是上游 [google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) 的 DSH 适配层：
+Plugin ini adalah lapisan adaptasi DSH dari [google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model):
 
-1. 复用了上游所有 skills、agents personas 和 resources
-2. 通过 `cordis.patch.yml` 注册 `dsh-skill-filesystem` provider
-3. 替换了 `${CLAUDE_PLUGIN_ROOT}` 等 Claude Code 特定引用
-4. 添加了 DSH 子代理工具 (`subagent`) 的适配说明
+1. Menggunakan ulang semua skills, persona agents, dan resources dari upstream
+2. Mendaftar provider skill via `cordis.patch.yml` dengan mekanisme `bundledSkillDir`
+3. Mengganti referensi `${CLAUDE_PLUGIN_ROOT}` (spesifik Claude Code) dengan panduan DSH
+4. Menyesuaikan petunjuk delegasi subagent dari `Agent` menjadi `subagent`
 
-上游由 Google LLC 开发，本适配层由 DeepSeek Harness 社区维护。
+Upstream dikembangkan oleh Google LLC; lapisan adaptasi DSH ini dikelola komunitas DeepSeek Harness.
 
-## 许可证
+## Lisensi
 
-Apache-2.0 — 与上游 EGM 保持一致。
+Apache-2.0 — sesuai dengan lisensi upstream EGM.
