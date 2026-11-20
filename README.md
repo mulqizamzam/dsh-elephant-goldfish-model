@@ -12,13 +12,45 @@ Plugin DeepSeek Harness yang membawa workflows [Elephant-Goldfish Model](https:/
 
 ## Instalasi
 
-```sh
-# Tambahkan plugin ke profile DSH
-dsh plugin --profile web add ./dsh-elephant-goldfish-model
+### Dari repo lokal (pengembangan)
 
-# Verifikasi pemasangan
-dsh --profile web --dump-config | grep elephant-goldfish
+Gunakan ketika ingin menguji plugin dari direktori kerja sebelum dipublikasikan:
+
+```sh
+dsh plugin --profile web add ./dsh-elephant-goldfish-model
 ```
+
+Perintah ini menyalin dependensi ke profile, membuat symlink `link:`, dan menambahkan bundle ke `dsh.profile.bundles`.
+
+### Dari GitHub (stabil)
+
+Gunakan ketika plugin sudah dirilis di repository personal/publik:
+
+```sh
+dsh plugin --profile web add github:mulqizamzam/dsh-elephant-goldfish-model#main
+```
+
+### Dari npm (terbitan resmi)
+
+Jika plugin sudah dipublikasikan ke registry:
+
+```sh
+dsh plugin --profile web add dsh-elephant-goldfish-model@0.1.1
+```
+
+### Verifikasi pemasangan
+
+Setelah salah satu cara di atas, pastikan plugin termuat tanpa kesalahan:
+
+```sh
+# Cek baris plugin muncul di config (harus ada prefix "# ==")
+dsh --profile web --dump-config | grep elephant-goldfish
+
+# Hitung jumlah bundle yang di-skip (harus 0)
+dsh --profile web --dump-config 2>&1 | grep -c "skipping profile bundle"
+```
+
+Hasil yang diharapkan: baris plugin muncul dan jumlah skip adalah **0**. Jika muncul peringatan `peerDependencies` dari pnpm, itu hanya saran — bukan kegagalan, karena DSH menyediakan `@deepseek-ai/dsh-skill-filesystem` lewat layer `dsh-base`.
 
 ## Cara Pakai
 
