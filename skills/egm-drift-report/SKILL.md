@@ -12,7 +12,7 @@ description: >-
 # Detect Drift In Designs and Code
 
 When running in Codex or ChatGPT Work, first read [Codex integration](../../docs/codex.md).
-Read `${DSH_PLUGIN_ROOT:-skills}/../docs/dsh.md` for DeepSeek Harness integration notes.
+Read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` for Claude Code integration notes, or `${DSH_PLUGIN_ROOT:-skills}/../docs/dsh.md` for DeepSeek Harness integration notes.
 
 When the user asks to detect drift across all designs or a set of READMEs, the
 goal is to identify all instances where the codebase has diverged or failed to

@@ -8,7 +8,7 @@ description: Bootstrap directory README.md files across a repository subtree.
 # EGM Peanuts and Hay Bootstrap (`egm-bootstrap`)
 
 When running in Codex or ChatGPT Work, first read [Codex integration](../../docs/codex.md).
-Read `${DSH_PLUGIN_ROOT:-skills}/../docs/dsh.md` for DeepSeek Harness integration notes.
+Read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` for Claude Code integration notes, or `${DSH_PLUGIN_ROOT:-skills}/../docs/dsh.md` for DeepSeek Harness integration notes.
 
 ## Overview
 

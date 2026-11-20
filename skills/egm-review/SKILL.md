@@ -12,7 +12,7 @@ description: >-
 # Review, Validation & Automated Remediation
 
 When running in Codex or ChatGPT Work, first read [Codex integration](../../docs/codex.md).
-Read `${DSH_PLUGIN_ROOT:-skills}/../docs/dsh.md` for DeepSeek Harness integration notes.
+Read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` for Claude Code integration notes, or `${DSH_PLUGIN_ROOT:-skills}/../docs/dsh.md` for DeepSeek Harness integration notes.
 
 Reviews and validates a design document through specialized reviewer personas.
 
