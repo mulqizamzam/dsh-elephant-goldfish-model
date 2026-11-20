@@ -422,7 +422,3 @@ modify repository files in this section.
         confirm that in chat).
     *   *If Post-Implementation (Diff Review):* Instruct user to type
         **`checklist`** to update `egm_lite_checklist.md` with fix tasks, or
-        **`exec`** to update checklist and implement fixes immediately (or, if
-        no fixes remain, to confirm completion in chat).
-
-    *(Model Rule: Halt for user response.)*

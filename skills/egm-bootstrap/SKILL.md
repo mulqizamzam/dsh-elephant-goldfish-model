@@ -64,7 +64,7 @@ If your harness has no subagent tool, run the scout steps inline.
     repository, it may optionally be invoked.
 5.  **Subagent Delegation**: Spawn sub-orchestrator workers in parallel.
 6.  **Mandatory Safety Gate (CRITICAL)**: If you discover more than 15
-    subdirectories, you MUST immediately request user approval (using a structured question tool, if your harness has one, or plain chat) before proceeding with full-tree execution
+    subdirectories, you MUST immediately request user approval (using your harness's question tool) before proceeding with full-tree execution
     or unbounded subagent spawning.
 
 ---
@@ -112,7 +112,7 @@ If your harness has no subagent tool, run the scout steps inline.
 
 2.  **Safety Gate & Unbounded Spawning Approval (CRITICAL)**: During the BFS
     loop, if the total running count of discovered directories exceeds **15**,
-    immediately pause discovery and request user approval (using a structured question tool, if your harness has one, or plain chat) to warn the user and request approval
+    immediately pause discovery and request user approval (using your harness's question tool) to warn the user and request approval
     for full-tree execution:
 
     *   `question`: "The target directory tree contains more than 15
@@ -416,7 +416,7 @@ If your harness has no subagent tool, run the scout steps inline.
         the modified contracts to verify both missing code coverage and
         doc-to-code hallucinations (verifying every documented method, route,
         enum, database table, and invariant against local source files and
-        recording discrepancies in the drift report for human triage). (Note:
+        recording discrepancies for human triage). (Note:
         While `egm-drift-report` is often used for design documents, it can be
         applied to EGM-compliant contracts as a variant).
 
@@ -426,7 +426,5 @@ If your harness has no subagent tool, run the scout steps inline.
 
 ## Templates
 
-Before writing any contract file, read the
-[README templates](references/templates.md) relative to this skill directory.
-It defines the **Component Package (Peanuts)**, **Repository Root (Blueprint /
-Hay)**, and **Intermediate Blueprint** README templates referenced above.
+Read [templates](references/templates.md) before writing any contract —
+it defines Component Package (Peanuts), Repository Root (Blueprint/Hay),

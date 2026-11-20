@@ -72,3 +72,49 @@ Skills 在执行时通过相对路径访问以下共享资源：
 - `assets/icon.svg` — 插件图标
 
 这些路径相对于插件根目录，由 `bundledSkillDir` 配置自动解析。
+
+## Quick Commands
+
+```sh
+# Install ke profile web
+dsh plugin --profile web add github:mulqizamzam/dsh-elephant-goldfish-model#main
+
+# Verifikasi instalasi
+dsh --profile web --dump-config | grep elephant-goldfish
+# Harun muncul: "# == dsh-elephant-goldfish-model" dan "- id: dsh-elephant-goldfish-model-skills"
+
+# Hitung bundle skip (harus 0)
+dsh --profile web --dump-config 2>&1 | grep -c "skipping profile bundle"
+
+# Uninstall (jika perlu)
+dsh plugin --profile web remove dsh-elephant-goldfish-model
+```
+
+## Memanggil Skills
+
+Setelah terpasang, panggil skill melalui alat `skill`:
+
+| Perintah | Fungsi |
+|----------|--------|
+| `skill("egm-brainstorm")` | Brainstorm ide baru |
+| `skill("egm-draft")` | Susun draf dokumen desain |
+| `skill("egm-review")` | Goldfish review dokumen |
+| `skill("egm-review-loop")` | Review multi-round otomatis |
+| `skill("egm-resolve")` | Selesaikan temuan review |
+| `skill("egm-drift-report")` | Cek drift kode vs desain |
+| `skill("egm-bootstrap")` | Generate README EGM-compliant |
+| `skill("egm-lite")` | Workflow EGM ringan |
+
+## Subagent di DSH
+
+EGM membutuhkan Goldfish reviewer dalam konteks terpisah. Gunakan `subagent`:
+
+\`\`\`javascript
+// Spawn zoom-out reviewer
+subagent({
+  description: "EGM zoom-out review",
+  prompt: "Baca agents/zoom_out.md, lalu review dokumen ini..."
+})
+\`\`\`
+
+Setiap persona tersimpan di \`agents/<nama>.md\`. Field \`name\` di frontmatter menandai tipe reviewer.

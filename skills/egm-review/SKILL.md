@@ -29,7 +29,7 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 
 ## Execution Constraints (CRITICAL)
 
-1.  **Artifact-First Delivery (MANDATORY)**: You are **STRICTLY FORBIDDEN** from
+ **Artifact-First Delivery (MANDATORY)**: You are **STRICTLY FORBIDDEN** from
     presenting large proposals, drafts, summaries, or plans directly in the chat
     pane. You **MUST** write them to the working directory (or your harness's
     artifact directory, if it has one) using your file-writing tool and then
@@ -81,7 +81,7 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 
 ### Step 1: Intake & Setup
 
-1.  Verify if `TargetFile` is provided. If missing:
+ Verify if `TargetFile` is provided. If missing:
     *   Explain to the user that the target design document path is required to
         analyze its structure and discover the semantic split.
     *   Prompt the user in chat for the path via a regular text message (do NOT
@@ -120,7 +120,7 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 
 ### Step 2: Curated Pipeline Preset Selection
 
-1.  **Preset Gate Check**:
+ **Preset Gate Check**:
     *   If `Step` parameter was explicitly provided during invocation (e.g.
         `interactive`, `uninterrupted`, `feature_spec`, `implementation`, or an
         individual stage `5`, `6`, `7`, `8`, `9`), map to the corresponding
@@ -159,7 +159,7 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
         }
         ```
 
-3.  **Action Dispatch Based on Preset**:
+ **Action Dispatch Based on Preset**:
 
     *   **Preset 0: `Interactive review with all review rubrics`**: Proceed to
         Step 3 to discover the semantic split, then execute Stages 5, 6, 7, 8,
@@ -178,13 +178,13 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 
 ### Step 3: Semantic Split Discovery
 
-1.  **Split Bypass Check**: If Preset 2 (`Feature spec only`) was selected,
+ **Split Bypass Check**: If Preset 2 (`Feature spec only`) was selected,
     **skip this step completely**. Set `FeatureRange` to cover the entire
     document (lines 1 through End) and proceed directly to Step 4.
 2.  **Inspect Document**: Read `TargetFile` to inspect its structure and line
     count.
 3.  **Discover Split Boundary**: Scan for the primary dividing header `##
-    Detailed Implementation Plan` (or standard synonyms: `## Implementation
+    Detailed Implementation Plan` (or synonyms: `## Implementation
     Plan`, `## Work Breakdown`, `## Implementation Steps`).
     *   **Standard Layout Detected**: If the boundary header is unambiguously
         identified at line $L$:
@@ -210,7 +210,7 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 
 Once the semantic split and execution preset are confirmed:
 
-1.  **Confirm Review Target**: Verify that `FeatureRange` and `DetailedRange`
+ **Confirm Review Target**: Verify that `FeatureRange` and `DetailedRange`
     are bound.
 2.  **Dispatch Execution Pipeline**:
     *   **Interactive review with all review rubrics**: Execute Stage 5 → Stage
@@ -233,7 +233,7 @@ All interactive review stages conclude with an explicit single-select gate
 `len(questions) == 1`, `is_multi_select: false`, sole tool call in turn, or
 plain chat):
 
-1.  **Stage Checkpoint Patterns**:
+ **Stage Checkpoint Patterns**:
     *   **Stages 5, 6, 8 (Altitude & Comprehension Checkpoints)**:
         *   Option 0: `Proceed to next stage: Stage [N+1] ([Next Stage Name])`
             (or `Conclude review and begin detailed implementation planning` for
@@ -279,7 +279,7 @@ plain chat):
 
 ### Subflow: Uninterrupted Full Flow
 
-1.  **Uninterrupted Stage Execution**: Execute all five review stages in
+ **Uninterrupted Stage Execution**: Execute all five review stages in
     sequence without interactive checkpoint pauses between steps. For each
     stage, write the individual report file to the working directory (or your
     harness's artifact directory, if it has one). Pass `GoldfishContext` to
@@ -314,7 +314,7 @@ plain chat):
 
 ### Subflow: Zoom Out Review
 
-1.  **Delegate to Synthesizer Subagent**: Spawn `egm-synthesizer` (or the
+ **Delegate to Synthesizer Subagent**: Spawn `egm-synthesizer` (or the
     specialized `egm-zoom-out` subagent at `agents/zoom_out.md`) on `full file`
     applying `resources/document_standards/zoom-out-standard.md`. When running
     as Step 8 (Intermediate Zoom Out), include `zoom_out_report.md` path in
@@ -325,7 +325,7 @@ plain chat):
     In both Stage 5 and Stage 8, pass `GoldfishContext`.
 2.  **Delivery**: Write findings to `zoom_out_report.md` (Stage 5) or
     `intermediate_zoom_out_report.md` (Stage 8) using your file-writing tool.
-3.  **Notify User (No Chat Dumps)**: Notify user that findings are written to
+3.  **Notify User (No Chat Dumps)**: Notify user: findings written to
     the report file (give its path).
 4.  **Checkpoint Gate**: Present the tri-state gate following the Checkpoint
     Gate Protocol:
@@ -348,7 +348,7 @@ plain chat):
 
 ### Subflow: Comprehension Test
 
-1.  **Spawn the Reviewer Directly**: Spawn the `egm-comprehension` subagent
+ **Spawn the Reviewer Directly**: Spawn the `egm-comprehension` subagent
     at `agents/comprehension.md` on `FeatureRange` & `DetailedRange` with no
     document standard. Do not use the synthesizer: its report keeps only
     findings, and the author must see the paraphrase. The test is self-containment,
@@ -358,7 +358,7 @@ plain chat):
     `comprehension_report.md` using your file-writing tool. Start with the two
     paraphrase headings verbatim, then the findings. Keep the paraphrase when
     there are no findings.
-3.  **Notify User (No Chat Dumps)**: Notify user that findings are written to
+3.  **Notify User (No Chat Dumps)**: Notify user: findings written to
     `comprehension_report.md` (give its path).
 4.  **Checkpoint Gate**: Present the Stage 6 tri-state gate:
     *   Question: `"Stage 6 (Comprehension Test) completed. Findings written to
@@ -370,11 +370,11 @@ plain chat):
 
 ### Subflow: Critic Review
 
-1.  **Invoke Antagonistic Review Loop**: Invoke `egm-review-loop` in-thread on
+ **Invoke Antagonistic Review Loop**: Invoke `egm-review-loop` on
     `FeatureRange` with reviewers `[egm-design, egm-structural, egm-style]`,
     standards `{"egm-design": "feature-spec-standard", "egm-structural":
     "feature-spec-standard"}`, and `GoldfishContext`.
-2.  **Notify User (No Chat Dumps)**: Notify user that findings are written to
+2.  **Notify User (No Chat Dumps)**: Notify user: findings written to
     `critic_report.md` (give its path).
 3.  **Checkpoint Gate**: Present the Stage 7 gate:
     *   Question: `"Stage 7 (Critic Review) completed. Findings written to
@@ -397,13 +397,13 @@ plain chat):
 
 ### Subflow: Implementation Readiness Test
 
-1.  **Invoke Antagonistic Review Loop**: Invoke `egm-review-loop` in-thread on
+ **Invoke Antagonistic Review Loop**: Invoke `egm-review-loop` on
     `DetailedRange` with reviewers `[egm-implementation-readiness,
     egm-codebase-details, egm-style]` and standards
     `{"egm-implementation-readiness": "implementation-readiness-standard",
     "egm-codebase-details": "implementation-readiness-standard"}`, and
     `GoldfishContext`.
-2.  **Notify User (No Chat Dumps)**: Notify user that findings are written to
+2.  **Notify User (No Chat Dumps)**: Notify user: findings written to
     `implementation_readiness_report.md` (give its path).
 3.  **Terminal Checkpoint Gate**: Present the Stage 9 terminal gate:
     *   Question: `"Stage 9 (Implementation Readiness Test) completed. Report
@@ -418,9 +418,3 @@ plain chat):
 4.  **Remediation & Resolution (Option 1)**:
     *   Invoke `egm-resolve` in the primary Elephant context on `DetailedRange`,
         passing findings from `implementation_readiness_report.md` (or
-        `goldfish_review_report.md`).
-    *   Execute approved fixes directly on `TargetFile` using file editing
-        tools.
-    *   After fixes are applied, re-read `TargetFile` to recalculate line
-        bounds, and conclude the review session (or re-run Stage 9, max 1
-        re-audit).

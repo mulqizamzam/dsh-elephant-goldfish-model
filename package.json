@@ -46,5 +46,8 @@
     "spec-driven-development",
     "agent-skills",
     "design-review"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/mulqizamzam/dsh-elephant-goldfish-model/issues"
+  }
 }
