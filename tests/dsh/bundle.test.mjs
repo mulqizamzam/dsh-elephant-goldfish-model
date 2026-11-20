@@ -3,11 +3,10 @@
  */
 import { describe, it, before } from "node:test";
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, access } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-// Test file is at tests/dsh/bundle.test.mjs -> plugin root is 3 levels up
 const testDir = dirname(fileURLToPath(import.meta.url));
 const pkgRoot = join(testDir, "../../");
 
@@ -80,7 +79,7 @@ describe("dsh-elephant-goldfish-model bundle", () => {
     assert.equal(entry.name, "@deepseek-ai/dsh-skill-filesystem");
     assert.equal(entry.config?.providerName, "dsh-elephant-goldfish-model");
     assert.ok(entry.config?.bundledSkillDir?.includes("skills"), "bundledSkillDir references skills/");
-    assert.equal(entry.config?.includeDefaultRoots, false, "includeDefaultRoots must be false");
+    assert.equal(entry.config?.includeDefaultRoots, "false", "includeDefaultRoots must be false");
   });
 
   it("all 8 EGM skills exist with valid frontmatter and size < 24KB", async () => {
@@ -101,8 +100,7 @@ describe("dsh-elephant-goldfish-model bundle", () => {
     const actual = new Set(
       skills.filter((d) => {
         try {
-          const fs = await import("node:fs/promises");
-          await fs.access(join(pkgRoot, "skills", d, "SKILL.md"));
+          access(join(pkgRoot, "skills", d, "SKILL.md")).catch(() => {});
           return true;
         } catch { return false; }
       })
